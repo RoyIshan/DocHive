@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "242658637205",
+    "project_id": "dochive-d86cd",
+    "storage_bucket": "dochive-d86cd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:242658637205:android:593650af64bc7bbd99729c",
+        "android_client_info": {
+          "package_name": "com.fatbit.dochive"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "242658637205-k8c1c52u99ooe5kudrq0uir6jgjtj8f6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fatbit.dochive",
+            "certificate_hash": "7ed20e6222e562cc445b41d8033d1002bf5b0416"
+          }
+        },
+        {
+          "client_id": "242658637205-dfn1u65bitst1n0ud1nkvdbdnqs49d3c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoMiIgNn0zo554VHzZmJ6r96b3e4i28eU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "242658637205-dfn1u65bitst1n0ud1nkvdbdnqs49d3c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
