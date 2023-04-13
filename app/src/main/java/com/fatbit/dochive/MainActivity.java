@@ -1,27 +1,40 @@
 package com.fatbit.dochive;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Fragment {
 
     private SearchView searchView;
+    DrawerLayout mDrawerLayout;
     private ListView listView;
     private List<String> itemList = new ArrayList<>();
     private List<String> filteredList =  new ArrayList<>();
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        View views = inflater.inflate(R.layout.activity_main, container, false);
+
+        FloatingActionButton wFab = views.findViewById(R.id.assigntask);
+
+        wFab.setOnClickListener(view -> new AddPatDetails().show(getActivity().getSupportFragmentManager(), AddPatDetails.TAG));
 
         itemList.add("Item 1");
         itemList.add("Item 2");
@@ -33,12 +46,12 @@ public class MainActivity extends AppCompatActivity {
         itemList.add("Item 8");
         itemList.add("Item 8");
         itemList.add("Item 9");
-        listView = findViewById(R.id.rview);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, itemList);
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, filteredList);
+        listView = views.findViewById(R.id.rview);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, itemList);
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, filteredList);
         listView.setAdapter(adapter);
 
-        searchView = findViewById(R.id.sView);
+        searchView = views.findViewById(R.id.sView);
         searchView.clearFocus();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -60,12 +73,13 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 if(filteredList.isEmpty()){
-                    Toast.makeText(MainActivity.this, "No data found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "No data found", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     listView.setAdapter(adapter2);
                 }
             }
         });
+        return views;
     }
 }
