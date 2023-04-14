@@ -101,9 +101,9 @@ public class MainActivity extends Fragment {
             String selectedItem = (String) parent.getItemAtPosition(position);
             Intent intent = new Intent(getContext(),ViewDetail.class);
             String arr[] = selectedItem.split(" ");
-            intent.putExtra("name", arr[0]);
+            intent.putExtra("nameofp", arr[0]);
             startActivity(intent);
-
+            Toast.makeText(getContext(), arr[0], Toast.LENGTH_SHORT).show();
             //textView.setText("The best football player is : " + selectedItem);
         });
         return views;
