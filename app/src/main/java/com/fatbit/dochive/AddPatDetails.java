@@ -22,7 +22,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -31,12 +35,10 @@ import java.util.Map;
 public class AddPatDetails extends BottomSheetDialogFragment {
     public static final String TAG = "AddNewTask";
 
-    private TextView setDeadline;
-    private EditText wTaskEdit,address,phoneNumber;
+    private EditText wNameEdit,pID,phoneNumber;
     private Button wAssignBtn;
 
     private Context context;
-    private String deadLine = "",NameofWorker;
 
 
 
@@ -54,15 +56,14 @@ public class AddPatDetails extends BottomSheetDialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        setDeadline = view.findViewById(R.id.set_deadline);
-        wTaskEdit = view.findViewById(R.id.task_edittext);
+        wNameEdit = view.findViewById(R.id.task_edittext);
         wAssignBtn = view.findViewById(R.id.assignbtn);
-        address = view.findViewById(R.id.task_address);
+        pID = view.findViewById(R.id.task_address);
         phoneNumber = view.findViewById(R.id.task_phoneNumber);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
-
-        wTaskEdit.addTextChangedListener(new TextWatcher() {
+        wNameEdit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -85,56 +86,38 @@ public class AddPatDetails extends BottomSheetDialogFragment {
             }
         });
 
-        setDeadline.setOnClickListener(view1 -> {
-            Calendar calendar = Calendar.getInstance();
-
-            int MONTH = calendar.get(Calendar.MONTH);
-            int YEAR = calendar.get(Calendar.YEAR);
-            int DAY = calendar.get(Calendar.DATE);
-
-            DatePickerDialog datePickerDialog = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
-                @Override
-                public void onDateSet(DatePicker view1, int year, int month, int dayOfMonth) {
-                    month = month + 1;
-                    setDeadline.setText(dayOfMonth + "/" + month + "/" + year);
-                    deadLine = dayOfMonth + "/" + month + "/" + year;
-                }
-            }, YEAR, MONTH, DAY);
-            datePickerDialog.show();
-        });
 
         wAssignBtn.setOnClickListener(view12 -> {
-            String task = wTaskEdit.getText().toString();
-            String smsNumber = phoneNumber.getText().toString();
-            String verificationCode = randomGenerate();
-            String smsText = "Code for Worker Attendance verification is : "+verificationCode+" \nWorker will ask you for this code";
+            String Name = wNameEdit.getText().toString();
 
-            Uri uri = Uri.parse("smsto:" + smsNumber);
-            Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
-            intent.putExtra("sms_body", smsText);
-            startActivity(intent);
-
-            if (task.isEmpty()) {
-                Toast.makeText(context, "Empty task not allowed!", Toast.LENGTH_SHORT).show();
+            if (Name.isEmpty()) {
+                Toast.makeText(context, "Empty Name not allowed!", Toast.LENGTH_SHORT).show();
             } else {
-                Map<String, Object> taskMap = new HashMap<>();
+                Map<String, Object> patientMap = new HashMap<>();
 
-                taskMap.put("task", task);
-                taskMap.put("deadline", deadLine);
-                taskMap.put("status", 1);
-                taskMap.put("address", address.getText().toString());
-                taskMap.put("number", phoneNumber.getText().toString());
-                taskMap.put("worker",NameofWorker);
-                taskMap.put("code",verificationCode);
+                patientMap.put("Name ", Name);
+                patientMap.put("Patient Id", pID.getText().toString());
+                patientMap.put("number", phoneNumber.getText().toString());
 
+                db.collection("Patient Detail")
+                        .add(patientMap)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                Toast.makeText(context, "Data Added", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
             dismiss();
         });
     }
 
-    private String randomGenerate() {
-        return String.valueOf((int) (Math.random()*(9999-1000+1)+1000));
-    }
 
     @Override
     public void onAttach(@NonNull Context context){
