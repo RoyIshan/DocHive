@@ -22,17 +22,15 @@ public class ViewDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_detail);
 
-        pname = getIntent().getStringExtra("name");
-        Toast.makeText(this, pname, Toast.LENGTH_SHORT).show();
+        pname = getIntent().getStringExtra("nameofp");
         pName = findViewById(R.id.pName);
         pId = findViewById(R.id.pID);
         pNumber = findViewById(R.id.number);
 
-        Toast.makeText(this, pname, Toast.LENGTH_SHORT).show();
         FirebaseFirestore db;
         db = FirebaseFirestore.getInstance();
         db.collection("Patient Detail")
-                .whereEqualTo("Name",pname)
+                .whereEqualTo("Patient Id",pname)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -41,7 +39,7 @@ public class ViewDetail extends AppCompatActivity {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Toast.makeText(ViewDetail.this, document.getString("Name "), Toast.LENGTH_SHORT).show();
                                 pName.setText(document.getString("Name "));
-                                pId.setText(document.getString("Patient ID"));
+                                pId.setText(document.getString("Patient Id"));
                                 pNumber.setText(document.getString("number"));
                             }
                         } else {
