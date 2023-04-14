@@ -1,11 +1,13 @@
 package com.fatbit.dochive;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +17,12 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +30,6 @@ import java.util.List;
 public class MainActivity extends Fragment {
 
     private SearchView searchView;
-    DrawerLayout mDrawerLayout;
     private ListView listView;
     private List<String> itemList = new ArrayList<>();
     private List<String> filteredList =  new ArrayList<>();
@@ -36,20 +42,29 @@ public class MainActivity extends Fragment {
 
         wFab.setOnClickListener(view -> new AddPatDetails().show(getActivity().getSupportFragmentManager(), AddPatDetails.TAG));
 
-        itemList.add("Item 1");
-        itemList.add("Item 2");
-        itemList.add("Item 3");
-        itemList.add("Item 4");
-        itemList.add("Item 5");
-        itemList.add("Item 6");
-        itemList.add("Item 7");
-        itemList.add("Item 8");
-        itemList.add("Item 8");
-        itemList.add("Item 9");
         listView = views.findViewById(R.id.rview);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, itemList);
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, filteredList);
-        listView.setAdapter(adapter);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("Patient Detail")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                //Toast.makeText(getContext(), document.get("Patient Id").toString(), Toast.LENGTH_SHORT).show();
+                                String data1 = document.get("Patient Id").toString();
+                                String data2 =  document.get("Name ").toString();
+                                itemList.add(data1+" - "+data2);
+                                listView.setAdapter(adapter);
+                            }
+                        } else {
+                            Toast.makeText(getContext(), "not done", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
 
         searchView = views.findViewById(R.id.sView);
         searchView.clearFocus();
@@ -73,6 +88,7 @@ public class MainActivity extends Fragment {
                     }
                 }
                 if(filteredList.isEmpty()){
+                    listView.setAdapter(adapter2);
                     Toast.makeText(getContext(), "No data found", Toast.LENGTH_SHORT).show();
                 }
                 else {

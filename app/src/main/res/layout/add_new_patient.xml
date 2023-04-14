@@ -12,12 +12,13 @@
 
     <EditText
         android:id="@+id/task_phoneNumber"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
+        android:layout_marginTop="8dp"
         android:backgroundTint="#ECF7FF"
         android:elevation="10dp"
-        android:hint="Customer's Phone Number"
+        android:hint="Phone Number of Patient"
         android:inputType="phone"
         android:paddingStart="20dp"
         android:paddingEnd="10dp"
@@ -28,13 +29,13 @@
 
     <EditText
         android:id="@+id/task_address"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:layout_marginTop="8dp"
         android:backgroundTint="#ECF7FF"
         android:elevation="10dp"
-        android:hint="Address of Customer"
+        android:hint="Patient ID"
         android:inputType="textPostalAddress"
         android:paddingStart="20dp"
         android:paddingEnd="10dp"
@@ -45,52 +46,32 @@
 
     <EditText
         android:id="@+id/task_edittext"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="28dp"
         android:backgroundTint="#ECF7FF"
         android:elevation="10dp"
-        android:hint="Enter Task Details"
+        android:hint="Name of patient"
         android:inputType="text"
         android:paddingStart="20dp"
         android:paddingEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.703"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/set_deadline"
-        android:layout_width="152dp"
-        android:layout_height="27dp"
-        android:drawablePadding="5dp"
-        android:elegantTextHeight="true"
-        android:elevation="10dp"
-        android:text="Set Deadline"
-        android:textAllCaps="true"
-        android:textColor="#036DC1"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/task_phoneNumber"
-        app:layout_constraintVertical_bias="0.022" />
 
     <Button
         android:id="@+id/assignbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:elevation="10dp"
         android:text="Assign"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.373" />
+        app:layout_constraintTop_toBottomOf="@+id/task_phoneNumber" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
