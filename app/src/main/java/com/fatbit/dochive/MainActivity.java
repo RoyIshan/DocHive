@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,8 +44,8 @@ public class MainActivity extends Fragment {
         wFab.setOnClickListener(view -> new AddPatDetails().show(getActivity().getSupportFragmentManager(), AddPatDetails.TAG));
 
         listView = views.findViewById(R.id.rview);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, itemList);
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, filteredList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.list_resource, R.id.textView2, itemList);
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(getContext(), R.layout.list_resource, R.id.textView2, filteredList);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("Patient Detail")
@@ -95,6 +96,15 @@ public class MainActivity extends Fragment {
                     listView.setAdapter(adapter2);
                 }
             }
+        });
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedItem = (String) parent.getItemAtPosition(position);
+            Intent intent = new Intent(getContext(),ViewDetail.class);
+            String arr[] = selectedItem.split(" ");
+            intent.putExtra("name", arr[0]);
+            startActivity(intent);
+
+            //textView.setText("The best football player is : " + selectedItem);
         });
         return views;
     }
